@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Ensures that documents are migrated before being used." /><meta name="author" content="Timmoth" /><link rel="canonical" href="https://timmoth.github.io/DocMigrator/" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>DocMigrator</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Overview \u2705";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = "/DocMigrator/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".">
+          <img src="assets/logo.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Overview ✅</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#bson-demo">Bson Demo</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#json-demo">Json Demo</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#support-the-project">Support the project 🤝</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="releases/">Releases 📒</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="support/">Support 🛟</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="contributing/">Contributing 🙏</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">DocMigrator</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Overview ✅</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/Timmoth/DocMigrator/edit/main/docs/index.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="docmigrator">DocMigrator <img alt="Logo" src="assets/logo.png" /></h1>
+<p><a href="https://www.nuget.org/packages/DocMigrator.Json"><img alt="Json" src="https://img.shields.io/nuget/v/DocMigrator.Json?label=Json" /></a>
+<a href="https://www.nuget.org/packages/DocMigrator.Bson"><img alt="Bson" src="https://img.shields.io/nuget/v/DocMigrator.Bson?label=Bson" /></a></p>
+<p>Zero downtime on-the-fly document migrations.</p>
+<h3 id="overview">Overview:</h3>
+<p>When working with a document database, it's common to store multiple document schemas simultaneously. Often, this is fine since you can develop your application code to be backward compatible with previous versions. However, sometimes writing backward-compatible code can become very messy and error prone, especially when dealing with many versions of a document.</p>
+<p>An alternative solution is to apply a migration to the entire database at once, though this is not optimal since it can lead to downtime and performance issues during the migration. Enter DocMigrator, a simple yet high-performance package that enables you to migrate your documents on the fly as they are being deserialized, ensuring zero downtime.</p>
+<h3 id="bson-demo">Bson Demo</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// Install the nuget package</span>
+<span class="n">dotnet</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">package</span><span class="w"> </span><span class="n">DocMigrator</span><span class="p">.</span><span class="n">Bson</span>
+
+<span class="c1">// Define document</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">User</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="na">[BsonElement(&quot;schema_version&quot;)]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">SchemaVersion</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="na">[BsonElement(&quot;full_name&quot;)]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">FullName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="na">[BsonElement(&quot;avatar_url&quot;)]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">AvatarUrl</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Create Migrators</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UserMigrationDeserializer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BsonMigrationDeserializer</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">UserMigrationDeserializer</span><span class="p">(</span><span class="n">IServiceProvider</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">UserMigrationDeserializer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">logger</span><span class="p">)</span><span class="w"> </span><span class="p">:</span>
+<span class="w">        </span><span class="k">base</span><span class="p">(</span><span class="n">serviceProvider</span><span class="p">,</span><span class="w"> </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Func</span><span class="o">&lt;</span><span class="n">IServiceProvider</span><span class="p">,</span><span class="w"> </span><span class="n">BsonDocument</span><span class="p">,</span><span class="w"> </span><span class="n">ValueTask</span><span class="o">&gt;&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">ApplyMigration_1</span><span class="p">,</span>
+<span class="w">            </span><span class="n">ApplyMigration_2</span>
+<span class="w">        </span><span class="p">})</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">ValueTask</span><span class="w"> </span><span class="nf">ApplyMigration_1</span><span class="p">(</span><span class="n">IServiceProvider</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">,</span><span class="w"> </span><span class="n">BsonDocument</span><span class="w"> </span><span class="n">document</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">document</span><span class="p">[</span><span class="s">&quot;full_name&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;{document[&quot;</span><span class="n">first_name</span><span class="s">&quot;]} {document[&quot;</span><span class="n">last_name</span><span class="s">&quot;]}&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">document</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="s">&quot;first_name&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">document</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="s">&quot;last_name&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ValueTask</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">ValueTask</span><span class="w"> </span><span class="nf">ApplyMigration_2</span><span class="p">(</span><span class="n">IServiceProvider</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">,</span><span class="w"> </span><span class="n">BsonDocument</span><span class="w"> </span><span class="n">document</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">avatarService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">.</span><span class="n">GetRequiredService</span><span class="o">&lt;</span><span class="n">AvatarService</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="n">document</span><span class="p">[</span><span class="s">&quot;avatar_url&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">avatarService</span><span class="p">.</span><span class="n">GetAvatarUrl</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="s">&quot;id&quot;</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Register your migrators</span>
+<span class="n">services</span><span class="p">.</span><span class="n">AddBsonMigrator</span><span class="p">(</span><span class="n">Assembly</span><span class="p">.</span><span class="n">GetExecutingAssembly</span><span class="p">());</span>
+</code></pre></div>
+<h3 id="json-demo">Json Demo</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// Install the nuget package</span>
+<span class="n">dotnet</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">package</span><span class="w"> </span><span class="n">DocMigrator</span><span class="p">.</span><span class="n">Json</span>
+
+<span class="c1">// Define document</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">User</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="na">[JsonPropertyName(&quot;schema_version&quot;)]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">SchemaVersion</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="na">[JsonPropertyName(&quot;full_name&quot;)]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">FullName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="na">[JsonPropertyName(&quot;avatar_url&quot;)]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">AvatarUrl</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Create Migrators</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UserMigrationDeserializer</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">JsonMigrationDeserializer</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">UserMigrationDeserializer</span><span class="p">(</span><span class="n">IServiceProvider</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">UserMigrationDeserializer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">logger</span><span class="p">)</span><span class="w"> </span><span class="p">:</span>
+<span class="w">        </span><span class="k">base</span><span class="p">(</span><span class="n">serviceProvider</span><span class="p">,</span><span class="w"> </span><span class="n">logger</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Func</span><span class="o">&lt;</span><span class="n">IServiceProvider</span><span class="p">,</span><span class="w"> </span><span class="n">JsonObject</span><span class="p">,</span><span class="w"> </span><span class="n">ValueTask</span><span class="o">&gt;&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">ApplyMigration_1</span><span class="p">,</span>
+<span class="w">            </span><span class="n">ApplyMigration_2</span>
+<span class="w">        </span><span class="p">})</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">ValueTask</span><span class="w"> </span><span class="nf">ApplyMigration_1</span><span class="p">(</span><span class="n">IServiceProvider</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">,</span><span class="w"> </span><span class="n">JsonObject</span><span class="w"> </span><span class="n">document</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">document</span><span class="p">[</span><span class="s">&quot;full_name&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;{document[&quot;</span><span class="n">first_name</span><span class="s">&quot;]} {document[&quot;</span><span class="n">last_name</span><span class="s">&quot;]}&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ValueTask</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">ValueTask</span><span class="w"> </span><span class="nf">ApplyMigration_2</span><span class="p">(</span><span class="n">IServiceProvider</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">,</span><span class="w"> </span><span class="n">JsonObject</span><span class="w"> </span><span class="n">document</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">avatarService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">.</span><span class="n">GetRequiredService</span><span class="o">&lt;</span><span class="n">AvatarService</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="n">document</span><span class="p">[</span><span class="s">&quot;avatar_url&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">avatarService</span><span class="p">.</span><span class="n">GetAvatarUrl</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="s">&quot;id&quot;</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Register your migrators</span>
+<span class="n">services</span><span class="p">.</span><span class="n">AddJsonMigrator</span><span class="p">(</span><span class="n">Assembly</span><span class="p">.</span><span class="n">GetExecutingAssembly</span><span class="p">());</span>
+</code></pre></div>
+<h3 id="support-the-project">Support the project 🤝</h3>
+<ul>
+<li><strong>🌟 Star this repository</strong>: It means a lot to me and helps with exposure.</li>
+<li><strong>🪲 Report bugs</strong>: Report any bugs you find by creating an issue.</li>
+<li><strong>📝 Contribute</strong>: Read the <a href="https://timmoth.github.io/DocMigrator/contributing">contribution guide</a> then pick up or create an issue.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="releases/" class="btn btn-neutral float-right" title="Releases 📒">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/Timmoth/DocMigrator/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+      <span><a href="releases/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.6.0
+Build Date UTC : 2024-06-26 16:07:20.497205+00:00
+-->
