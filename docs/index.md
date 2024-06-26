@@ -1,4 +1,4 @@
-# DocMigrator ![Logo](DocMigrator/logo.png)
+# DocMigrator ![Logo](assets/logo.png)
 [![Json](https://img.shields.io/nuget/v/DocMigrator.Json?label=Json)](https://www.nuget.org/packages/DocMigrator.Json)
 [![Bson](https://img.shields.io/nuget/v/DocMigrator.Bson?label=Bson)](https://www.nuget.org/packages/DocMigrator.Bson)
 
@@ -8,11 +8,6 @@ Zero downtime on-the-fly document migrations.
 When working with a document database, it's common to store multiple document schemas simultaneously. Often, this is fine since you can develop your application code to be backward compatible with previous versions. However, sometimes writing backward-compatible code can become very messy and error prone, especially when dealing with many versions of a document.
 
 An alternative solution is to apply a migration to the entire database at once, though this is not optimal since it can lead to downtime and performance issues during the migration. Enter DocMigrator, a simple yet high-performance package that enables you to migrate your documents on the fly as they are being deserialized, ensuring zero downtime.
-## Find out more 🤔
-  - [Overview ✅](https://timmoth.github.io/DocMigrator/index)
-  - [Releases 📒](https://timmoth.github.io/DocMigrator/releases)
-  - [Support 🛟](https://timmoth.github.io/DocMigrator/support)
-  - [Contributing 🙏](https://timmoth.github.io/DocMigrator/contributing)
 
 ### Bson Demo
 ```csharp
@@ -104,13 +99,8 @@ services.AddJsonMigrator(Assembly.GetExecutingAssembly());
 
 ```
 
-## Collaboration 🙏
-Like the idea and want to get involved? Check out the open issues or shoot me a message if you've got any ideas / feedback!
 
-## Support 🛟
-Need help? Ping me on [linkedin](https://www.linkedin.com/in/timmoth/) and I'd be more then happy to jump on a call to debug, help configure or answer any questions.
-
-## Support the project 🤝
+### Support the project 🤝
 
 - **🌟 Star this repository**: It means a lot to me and helps with exposure.
 - **🪲 Report bugs**: Report any bugs you find by creating an issue.

@@ -1,0 +1,24 @@
+site_name: DocMigrator
+site_url: https://timmoth.github.io/DocMigrator/
+site_description: Ensures that documents are migrated before being used.
+site_author: Timmoth
+repo_url: https://github.com/Timmoth/DocMigrator/
+edit_uri: edit/main/docs
+
+theme:
+  name: readthedocs
+  highlightjs: true
+  logo: assets/logo.png
+  hljs_languages:
+    - csharp
+nav:
+  - Overview ✅: index.md
+  - Releases 📒: releases.md
+  - Support 🛟: support.md
+  - Contributing 🙏: contributing.md
+
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
