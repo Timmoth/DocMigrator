@@ -1,4 +1,4 @@
-# DocMigrator ![Logo](DocMigrator/logo.png)
+# DocMigrator ![Logo](/logo.png)
 [![Json](https://img.shields.io/nuget/v/DocMigrator.Json?label=Json)](https://www.nuget.org/packages/DocMigrator.Json)
 [![Bson](https://img.shields.io/nuget/v/DocMigrator.Bson?label=Bson)](https://www.nuget.org/packages/DocMigrator.Bson)
 
