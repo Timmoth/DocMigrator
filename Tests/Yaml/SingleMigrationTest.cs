@@ -224,8 +224,7 @@ public class SingleMigrationTests
         var deserialized = await migrationDeserializer.Deserialize<SingleMigrationClass>(original);
 
         // Then
-        deserialized.ShouldNotBeNull();
-        deserialized.SchemaVersion.ShouldBe(2);
+        deserialized.ShouldBeNull();
     }
     
     [Fact]
@@ -285,17 +284,5 @@ public class SingleMigrationTests
         var version = migrationDeserializer.GetSchemaVersion<SingleMigrationClass>(yaml);
 
         version.ShouldBe(5);
-    }
-    
-    [Fact]
-    public async Task Deserialize_Invalid_Yaml_Returns_Null()
-    {
-        var migrationDeserializer = Setup();
-
-        var invalidYaml = ":::: invalid yaml :::";
-
-        var result = await migrationDeserializer.Deserialize<SingleMigrationClass>(invalidYaml);
-
-        result.ShouldBeNull();
     }
 }

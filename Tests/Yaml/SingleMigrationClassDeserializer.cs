@@ -12,7 +12,7 @@ public class SingleMigrationClassDeserializer : YamlMigrationDeserializer<Single
       {
         ApplyMigration_1,
         ApplyMigration_2
-      })
+      }, "schemaVersion")
   {
   }
 

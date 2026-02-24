@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using YamlDotNet.Core;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,7 +39,7 @@ public class YamlMigrator
     ///     version <c>0</c> is assumed.
     /// </param>
     /// <returns>
-    ///     A <see cref="ValueTask{TResult}" /> representing the asynchronous operation,
+    ///     A <see cref="ValueTask" /> representing the asynchronous operation,
     ///     containing the migrated and deserialized object, or <c>null</c> if deserialization fails.
     /// </returns>
     /// <exception cref="InvalidOperationException">

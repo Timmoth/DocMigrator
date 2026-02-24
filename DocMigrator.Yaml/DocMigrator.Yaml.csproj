@@ -8,7 +8,7 @@
 		<LangVersion>preview</LangVersion>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>DocMigrator.Yaml</PackageId>
-		<PackageVersion>10.0.2</PackageVersion>
+		<PackageVersion>10.0.3</PackageVersion>
 		<Authors>Tim Jones</Authors>
 		<Company>Aptacode</Company>
 		<Authors>Stephen Reaves</Authors>

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using Microsoft.Extensions.Logging;
@@ -5,11 +8,9 @@ using Microsoft.Extensions.Logging;
 namespace DocMigrator.Yaml;
 
 /// <summary>
-///   Base class for deserializing YAML documents with schema migrations.
+/// Base class for deserializing YAML documents with schema migrations.
 /// </summary>
-/// <typeparam name="T">
-///   The type to deserialize.
-/// </typeparam>
+/// <typeparam name="T">The target type.</typeparam>
 public abstract class YamlMigrationDeserializer<T> where T : class
 {
     private readonly ILogger<YamlMigrationDeserializer<T>> _logger;
@@ -18,35 +19,38 @@ public abstract class YamlMigrationDeserializer<T> where T : class
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="YamlMigrationDeserializer{T}" /> class.
+    /// The YAML property name that stores the schema version.
     /// </summary>
-    /// <param name="serviceProvider">
-    ///     The service provider used when executing migrations.
+    private readonly string _schemaVersionPropertyName;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="YamlMigrationDeserializer{T}"/> class.
+    /// </summary>
+    /// <param name="serviceProvider">Service provider used by migrations.</param>
+    /// <param name="logger">Logger instance.</param>
+    /// <param name="migrations">Ordered migration steps.</param>
+    /// <param name="schemaVersionPropertyName">
+    /// The YAML property name that represents the schema version.
     /// </param>
-    /// <param name="logger">
-    ///     The logger.
-    /// </param>
-    /// <param name="migrations">
-    ///     The ordered list of migration functions. Each migration represents a schema version increment.
-    /// </param>
-    /// <param name="deserializerBuilder">
-    ///     Optional deserializer builder configuration.
-    /// </param>
-    /// <param name="serializerBuilder">
-    ///     Optional serializer builder configuration.
-    /// </param>
+    /// <param name="deserializerBuilder">Optional deserializer configuration.</param>
+    /// <param name="serializerBuilder">Optional serializer configuration.</param>
     protected YamlMigrationDeserializer(
         IServiceProvider serviceProvider,
         ILogger<YamlMigrationDeserializer<T>> logger,
         IReadOnlyList<Func<IServiceProvider, Dictionary<object, object>, ValueTask>> migrations,
+        string schemaVersionPropertyName,
         DeserializerBuilder? deserializerBuilder = null,
         SerializerBuilder? serializerBuilder = null)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
+        _schemaVersionPropertyName = schemaVersionPropertyName 
+            ?? throw new ArgumentNullException(nameof(schemaVersionPropertyName));
+
         _deserializerBuilder = deserializerBuilder ?? new DeserializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .IgnoreUnmatchedProperties();
+
         _serializerBuilder = serializerBuilder ?? new SerializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance);
 
@@ -54,82 +58,57 @@ public abstract class YamlMigrationDeserializer<T> where T : class
     }
 
     /// <summary>
-    ///     Gets the list of migration functions.
+    /// Gets the registered migration steps.
     /// </summary>
     public IReadOnlyList<Func<IServiceProvider, Dictionary<object, object>, ValueTask>> Migrations { get; }
 
     /// <summary>
-    ///     Gets the current application schema version.
+    /// Gets the current application schema version.
     /// </summary>
-    /// <remarks>
-    ///     The application schema version is equal to the number of registered migrations.
-    /// </remarks>
     public int AppSchemaVersion => Migrations.Count;
 
     /// <summary>
-    ///     Deserializes the specified YAML string and applies any required migrations.
+    /// Deserializes YAML and applies required migrations.
     /// </summary>
-    /// <param name="yaml">
-    ///     The YAML string to deserialize.
-    /// </param>
-    /// <returns>
-    ///     A <see cref="ValueTask{TResult}" /> representing the asynchronous operation,
-    ///     containing the migrated and deserialized object, or <c>null</c> if deserialization fails.
-    /// </returns>
+    /// <param name="yaml">The YAML content.</param>
+    /// <returns>The migrated object or <c>null</c> on failure.</returns>
     public async ValueTask<T?> Deserialize(string yaml)
     {
         var deserializer = _deserializerBuilder.Build();
-
-        var obj = deserializer.Deserialize<Dictionary<object, object>>(yaml);
-
-        if (obj is null)
-        {
-            obj = new Dictionary<object, object>();
-        }
-
+        var obj = deserializer.Deserialize<Dictionary<object, object>>(yaml)
+                  ?? new Dictionary<object, object>();
+        
         try
         {
-            // Schema version defaults to 0
             var docSchemaVersion = GetSchemaVersion(yaml);
 
-            if (docSchemaVersion >= AppSchemaVersion)
+            
+            if (docSchemaVersion < AppSchemaVersion)
             {
-                // No migrations to be applied
-                return ConvertTo(obj);
-            }
+                for (var i = docSchemaVersion; i < AppSchemaVersion; i++)
+                {
+                    await Migrations[i](_serviceProvider, obj);
+                }
 
-            // Apply migrations
-            for (var i = docSchemaVersion; i < AppSchemaVersion; i++)
-            {
-                await Migrations[i](_serviceProvider, obj);
+                obj[_schemaVersionPropertyName] = AppSchemaVersion;
             }
-
-            // Update schema version
-            obj["schemaVersion"] = AppSchemaVersion;
 
             return ConvertTo(obj);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to deserialize {type}", nameof(T));
+            _logger.LogError(ex, "Failed to deserialize {Type}", typeof(T).Name);
             return null;
         }
     }
 
     /// <summary>
-    ///     Converts a migrated YAML object graph into a strongly typed instance of <typeparamref name="T"/>.
+    /// Converts a migrated object graph into <typeparamref name="T"/>.
     /// </summary>
-    /// <param name="migratedObject">
-    ///     The migrated YAML object graph.
-    /// </param>
-    /// <returns>
-    ///     An instance of <typeparamref name="T"/>.
-    /// </returns>
+    /// <param name="migratedObject">The migrated dictionary.</param>
+    /// <returns>A strongly typed instance.</returns>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown when <paramref name="migratedObject" /> is <c>null</c>.
-    /// </exception>
-    /// <exception cref="YamlDotNet.Core.YamlException">
-    ///     Thrown when the object cannot be deserialized into <typeparamref name="T" />.
+    /// Thrown when <paramref name="migratedObject"/> is null.
     /// </exception>
     public T ConvertTo(Dictionary<object, object> migratedObject)
     {
@@ -145,25 +124,19 @@ public abstract class YamlMigrationDeserializer<T> where T : class
     }
 
     /// <summary>
-    ///     Gets the schema version defined in the specified YAML document.
+    /// Reads the schema version from YAML.
     /// </summary>
-    /// <param name="yaml">
-    ///     The YAML string to inspect.
-    /// </param>
-    /// <returns>
-    ///     The schema version defined in the document, or <c>0</c> if the field
-    ///     is missing, invalid, or the YAML cannot be parsed.
-    /// </returns>
+    /// <param name="yaml">The YAML content.</param>
+    /// <returns>The parsed schema version or 0 if missing/invalid.</returns>
     public int GetSchemaVersion(string yaml)
     {
         try
         {
             var deserializer = _deserializerBuilder.Build();
-
             var obj = deserializer.Deserialize<Dictionary<object, object>>(yaml);
 
             if (obj != null &&
-                obj.TryGetValue("schemaVersion", out var value) &&
+                obj.TryGetValue(_schemaVersionPropertyName, out var value) &&
                 value != null)
             {
                 if (value is int i)
